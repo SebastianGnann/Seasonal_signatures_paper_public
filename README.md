@@ -5,7 +5,7 @@ Please email sg16200@bristol.ac.uk if you have any questions.
 Matlab version: **Matlab R2018a**
 
 - Repository containing code to do the analysis and results used to create (most of) the plots for the seasonal signatures paper (https://www.hydrol-earth-syst-sci-discuss.net/hess-2019-463/): sine-fitting, calculation of seasonal signatures, code to call MARRMoT, etc.
-- Note that the original data is not uploaded here (see paper for data sources), but results that can be used to create (some of) the plots. This includes the results of the modelling exercise using MARRMoT and the calculated seasonal signatures. We also added examples with synthetic catchment data to show how the code can be used with any data of the correct format. See below for a description of the main scripts.
+- Note that the original data are not uploaded here (see paper for data sources), but results that can be used to create (some of) the plots. This includes the results of the modelling exercise using MARRMoT and the calculated seasonal signatures. We also added examples with synthetic catchment data to show how the code can be used with any data of the correct format. See below for a description of the main scripts.
 - There are a few additional open-source packages needed: the Brewerplot package (https://github.com/DrosteEffect/BrewerMap) for the colour schemes and the MARRMoT toolbox (https://zenodo.org/record/3235664#.XV-mKehKiUk) for the modelling exercise.
 - For the modelling results presented in the paper we used the Latin Hypercube sampling function implemented in the SAFE toolbox (https://www.safetoolbox.info/). The example file now uses the Matlab function.
 
