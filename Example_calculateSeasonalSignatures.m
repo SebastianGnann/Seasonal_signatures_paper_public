@@ -76,9 +76,13 @@ ERR_vec_confInt2 = NaN(length(ID_Example),1); % proxy for mean(Q)/mean(P-PET)
 param_P = NaN(length(ID_Example),3); %
 param_Q = NaN(length(ID_Example),3); %
 
-% confidence intervals (zeros for now... TODO: add confint)
+% confidence intervals (zeros for now)
 param_P_confInt = zeros(length(ID_Example),6); %
 param_Q_confInt = zeros(length(ID_Example),6); %
+
+% Fourier modes
+fft_max_F = NaN(length(ID_Example),1); %
+fft_max_Q = NaN(length(ID_Example),1); % 
 
 % define period
 period_1y = 365;
@@ -108,9 +112,14 @@ for i = 1:length(ID_Example) % nr of catchment
             A_vec_confInt2(i),phi_vec_confInt2(i),ERR_vec_confInt2(i)] = ...
             sig_seasonal2(Q(:,2),P(:,2),PET(:,2),Q(:,1));
         
+        % calculate strongest Fourier mode
+        [fft_max_F(i), fft_max_Q(i)] = ...
+            calcFourierSpectrum([P(:,1) P(:,2)-PET(:,2)],Q,w_1y);
+        
         % plot two example catchments
         title_str = '(a) 12345 - Example catchment';
-        plotSeasonalityCatchment([P(:,1) P(:,2)-PET(:,2)],Q,w_1y,ID,title_str)
+        plotSeasonalityCatchment([P(:,1) P(:,2)-PET(:,2)],Q,w_1y,ID,title_str)        
+        plotFourierSpectrum([P(:,1) P(:,2)-PET(:,2)],Q,w_1y,ID,title_str)        
         
     end
     
@@ -130,7 +139,7 @@ plotBivariate(phi_vec,phi_vec2,...
     'figure_title','(b)','figure_name','scatter_phase_shift_Example')
 plotBivariate(ERR_vec,ERR_vec2,...
     'x_name','Mean(Q)/Mean(P-E_p) cross-cov.','y_name','Mean(Q)/Mean(P-E_p) lin. regression',...
-    'ID',ID_Example,'x_limit',[-1 1],'y_limit',[-1 1],...
+    'ID',ID_Example,'x_limit',[-1.2 1.2],'y_limit',[-1.2 1.2],...
     'show_corr',true,'show_fit',false,'show_hist',false,...
     'figure_title','(c)','figure_name','scatter_effective_runoff_ratio_Example')
 
@@ -143,9 +152,12 @@ seasonal_signatures_Example.ERR_vec = ERR_vec;
 seasonal_signatures_Example.A_vec_confInt = A_vec_confInt;
 seasonal_signatures_Example.phi_vec_confInt = phi_vec_confInt;
 seasonal_signatures_Example.ERR_vec_confInt = ERR_vec_confInt;
-seasonal_signatures_Example.I_m = -1;
+seasonal_signatures_Example.I_m = -1; 
 seasonal_signatures_Example.I_mr = 0;
 seasonal_signatures_Example.f_s = frac_snow;
+seasonal_signatures_Example.BFI = 1;
+seasonal_signatures_Example.fft_max_F = fft_max_F;
+seasonal_signatures_Example.fft_max_Q = fft_max_Q;
 save('./Seasonal_signatures_paper_public/Data_and_results/seasonal_signatures_Example.mat','seasonal_signatures_Example')
 
 % method 2
@@ -159,4 +171,7 @@ seasonal_signatures_Example.ERR_vec_confInt = ERR_vec_confInt2;
 seasonal_signatures_Example.I_m = -1;
 seasonal_signatures_Example.I_mr = 0;
 seasonal_signatures_Example.f_s = frac_snow;
+seasonal_signatures_Example.BFI = 1;
+seasonal_signatures_Example.fft_max_F = fft_max_F;
+seasonal_signatures_Example.fft_max_Q = fft_max_Q;
 save('./Seasonal_signatures_paper_public/Data_and_results/seasonal_signatures_Example_2.mat','seasonal_signatures_Example')

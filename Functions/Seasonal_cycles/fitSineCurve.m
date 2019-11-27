@@ -22,6 +22,9 @@ M = ones(length(X(:,1)),3);
 M(:,2) = cos(w*X(:,1));
 M(:,3) = sin(w*X(:,1));
 
+% change NaN values to median for linear regression
+X(isnan(X(:,2)),2) = nanmedian(X(:,2));
+
 % solve equation system
 b = M\X(:,2);
 

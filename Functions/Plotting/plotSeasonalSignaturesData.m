@@ -114,10 +114,10 @@ colormap(colour_mat)
 c = colorbar;
 title(c,attribute_name)
 x1=get(gca,'position');
-A=get(c,'Position');
-A(3)=10/400;
+c_pos=get(c,'Position');
+c_pos(3)=10/400;
 % x(1)=0.95;
-set(c,'Position',A)
+set(c,'Position',c_pos)
 set(gca,'position',x1)
 if ~isempty(c_limits)
     caxis(c_limits)
@@ -134,6 +134,14 @@ title(figure_title)
 % update cursor
 dcm_obj = datacursormode(figure(f1));
 set(dcm_obj,'UpdateFcn',{@myupdatefcn,ID,[1:length(ID)]})
+
+% print correlations
+disp(['Correlation between amplitude ratio and ',attribute_name,' (Pearson/Spearman):'])
+disp([num2str(0.01*round(100*corr(A,attribute,'rows','complete','type','Pearson'))),'/',...
+    num2str(0.01*round(100*corr(A,attribute,'rows','complete','type','Spearman'))),''])
+disp(['Correlation between phase shift and ',attribute_name,' (Pearson/Spearman):'])
+disp([num2str(0.01*round(100*corr(phi,attribute,'rows','complete','type','Pearson'))),'/',...
+    num2str(0.01*round(100*corr(phi,attribute,'rows','complete','type','Spearman'))),''])
 
 % save fig
 set(f1,'Units','Inches');
