@@ -74,6 +74,7 @@ rng(15)
 n_samples = 20; % 2000 5000 10000 20000
 sample_points = lhsdesign(n_samples,numParam);
 parRange = feval([model_name,'_parameter_ranges']); % parameter ranges
+disp('Please change the paramater ranges in the corresponding MARRMoT file if you want the same ranges as in the paper.')
 % scale Latin hypercube with parameter ranges
 sample_parameters = sample_points.*(parRange(:,2)-parRange(:,1))'+parRange(:,1)';
 
