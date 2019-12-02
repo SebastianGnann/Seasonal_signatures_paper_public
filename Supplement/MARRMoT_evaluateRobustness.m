@@ -81,7 +81,7 @@ for signature_name = ["KGE", "BFI", "Amplitude ratio", "Phase shift"]
                 ID = ID_UK(i);
                 
                 % load results (no BC3 folder)
-                str_res = strcat('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT/',...
+                str_res = strcat('./Seasonal_signatures_paper_public/Data_and_results/Results_MARRMoT/',...
                     model_name,'_NR_',num2str(n_samples),'_ID_',num2str(ID),'.mat');
                 load(str_res);
                 
@@ -107,10 +107,10 @@ for signature_name = ["KGE", "BFI", "Amplitude ratio", "Phase shift"]
                 end
                 
                 % store results
-%                 rem = boolean(MC_results.amplitude_ratio>0.01 & ...
-%                     MC_results.amplitude_ratio<1.2 & ...
-%                     MC_results.phase_shift<200);
-%                 signature(~rem) = NaN;
+                rem = boolean(MC_results.amplitude_ratio>0.01 & ...
+                    MC_results.amplitude_ratio<1.2 & ...
+                    MC_results.phase_shift<200);
+                signature(~rem) = NaN;
                 results_cell{k,i_subset} = signature;
                 
             end
@@ -148,7 +148,7 @@ position = get(f1,'Position');
 set(f1,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[position(3),position(4)]);
 fig_name_raw = strcat('Model_results_boxplot',signature_name,model_name);
 fig_name = regexprep(fig_name_raw,'[^a-zA-Z0-9]','');
-path_name = './Seasonal_signatures_paper/Images';
+path_name = './Seasonal_signatures_paper_public/Images';
 fig_path = strcat(path_name,'\',fig_name);
 print(f1,fig_path,'-dpdf','-r600');
 
