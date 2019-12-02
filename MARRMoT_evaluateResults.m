@@ -27,9 +27,9 @@ end
 %% specify which model runs to evaluate
 
 % check if results files are unzipped
-if exist('./Seasonal_signatures_paper_public/Data_and_results/Results_MARRMoT') ~= 7
+if exist('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT') ~= 7
     disp('Unzipping MARRMoT results...')
-    unzip('./Seasonal_signatures_paper_public/Data_and_results/Results_MARRMoT.zip','./Seasonal_signatures_paper/Data_and_results')
+    unzip('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT.zip','./Seasonal_signatures_paper/Data_and_results')
 end
 
 % load catchment ID and aridity index
@@ -66,7 +66,7 @@ for model_id = 1:2
         signature_name = signature_name_list(i_name);
         
         % number of parameter sets
-        n_samples = 20000; % 2000, 5000, 10000, 20000
+        n_samples = 10000; % 2000, 5000, 10000, 20000
         parRange = feval([model_name,'_parameter_ranges']); % parameter ranges
         
         % specify subset of catchments
@@ -106,82 +106,78 @@ for model_id = 1:2
         
         for i=random_loop
             
-            try
-                % check whether record is part of subset
-                if  inSubset(i)
-                    
-                    % load catchment data
-                    count = count+1;
-                    sig_ID(count) = ID_UK(i);
-                    
-                    % load results
-                    str_results = ...
-                        strcat('./Seasonal_signatures_paper_public/Data_and_results/Results_MARRMoT/',...
-                        model_name,'_NR_',num2str(n_samples),'_ID_',num2str(sig_ID(count)),'.mat');
-                    load(str_results);
-                    
-                    %% plot results
-                    % fig 1
-                    % define signature to be plotted
-                    if strcmp(signature_name,'BFI')
-                        signature = MC_results.BFI_UKIH;
-                        signature_min = 0; signature_max = 1;
-                        sig_obs(count) = results_UK.BFI(i);
-                        if model_id == 1; title_name = '(c)'; end
-                        if model_id == 2; title_name = '(f)'; end
-                    elseif strcmp(signature_name,'Amplitude ratio')
-                        signature = MC_results.amplitude_ratio;
-                        signature_min = 0; signature_max = 1.2;
-                        sig_obs(count) = results_UK.A_vec(i);
-                        if model_id == 1; title_name = '(a)'; end
-                        if model_id == 2; title_name = '(d)'; end
-                    elseif strcmp(signature_name,'Phase shift [days]')
-                        signature = MC_results.phase_shift;
-                        signature_min = 0; signature_max = 200;
-                        sig_obs(count) = results_UK.phi_vec(i);
-                        if model_id == 1; title_name = '(b)'; end
-                        if model_id == 2; title_name = '(e)'; end
-                    else
-                        disp('Wrong signature name.')
-                    end
-                    
-                    % estimate distribution via kernel density estimation
-                    %         [density,temp_val] = ksdensity(signature);
-                    %         max_density = max(max_density, max(density));
-                    %         colour_mat = (brewermap(10,'Spectral'));
-                    % get approximate colours for aridity index
-                    %         col_fac = ceil((I_m_UK(i)+1)*5);
-                    %         plot(hax1,temp_val,density,'LineWidth',1.5,'color',colour_mat(col_fac,:))
-                    
-                    % remove runs that are "really bad"
-                    rem = boolean(MC_results.amplitude_ratio>0.01 & ...
-                        MC_results.amplitude_ratio<1.2 & ...
-                        MC_results.phase_shift<200);
-                    % & MC_results.KGE>-.41
-                    % & (MC_results.Q_mean./(results_UK.Q_mean(i)/365))>0.1);
-                    
-                    % get min, max and observed value
-                    sig_mat(count,:) = signature;
-                    signature = signature(rem);
-                    sig_min(count) = min(signature);
-                    sig_max(count) = max(signature);
-                    sig_med(count) = median(signature);
-                    sig_q25(count) = quantile(signature,0.25);
-                    sig_q75(count) = quantile(signature,0.75);
-                    sig_q01(count) = quantile(signature,0.01);
-                    sig_q99(count) = quantile(signature,0.99);
-                    I_m(count) = I_m_UK(i);
-                    col_fac(count) = ceil((I_m(count)+1)*5);
-                    
-                    % tmp = MC_results.parameter_set(:,4);
-                    A_plot = [A_plot; MC_results.amplitude_ratio(rem)];
-                    phi_plot = [phi_plot; MC_results.phase_shift(rem)];
-                    BFI_plot = [BFI_plot; MC_results.BFI_UKIH(rem)];
-                    
+            % check whether record is part of subset
+            if  inSubset(i)
+                
+                % load catchment data
+                count = count+1;
+                sig_ID(count) = ID_UK(i);
+                
+                % load results
+                str_results = ...
+                    strcat('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT/',...
+                    model_name,'_NR_',num2str(n_samples),'_ID_',num2str(sig_ID(count)),'.mat');
+                load(str_results);
+                
+                %% plot results
+                % fig 1
+                % define signature to be plotted
+                if strcmp(signature_name,'BFI')
+                    signature = MC_results.BFI_UKIH;
+                    signature_min = 0; signature_max = 1;
+                    sig_obs(count) = results_UK.BFI(i);
+                    if model_id == 1; title_name = '(c)'; end
+                    if model_id == 2; title_name = '(f)'; end
+                elseif strcmp(signature_name,'Amplitude ratio')
+                    signature = MC_results.amplitude_ratio;
+                    signature_min = 0; signature_max = 1.2;
+                    sig_obs(count) = results_UK.A_vec(i);
+                    if model_id == 1; title_name = '(a)'; end
+                    if model_id == 2; title_name = '(d)'; end
+                elseif strcmp(signature_name,'Phase shift [days]')
+                    signature = MC_results.phase_shift;
+                    signature_min = 0; signature_max = 200;
+                    sig_obs(count) = results_UK.phi_vec(i);
+                    if model_id == 1; title_name = '(b)'; end
+                    if model_id == 2; title_name = '(e)'; end
+                else
+                    disp('Wrong signature name.')
                 end
-            catch
+                
+                % estimate distribution via kernel density estimation
+                %         [density,temp_val] = ksdensity(signature);
+                %         max_density = max(max_density, max(density));
+                %         colour_mat = (brewermap(10,'Spectral'));
+                % get approximate colours for aridity index
+                %         col_fac = ceil((I_m_UK(i)+1)*5);
+                %         plot(hax1,temp_val,density,'LineWidth',1.5,'color',colour_mat(col_fac,:))
+                
+                % remove runs that are "really bad"
+                rem = boolean(MC_results.amplitude_ratio>0.01 & ...
+                    MC_results.amplitude_ratio<1.2 & ...
+                    MC_results.phase_shift<200);
+                % & MC_results.KGE>-.41
+                % & (MC_results.Q_mean./(results_UK.Q_mean(i)/365))>0.1);
+                
+                % get min, max and observed value
+                sig_mat(count,:) = signature;
+                signature = signature(rem);
+                sig_min(count) = min(signature);
+                sig_max(count) = max(signature);
+                sig_med(count) = median(signature);
+                sig_q25(count) = quantile(signature,0.25);
+                sig_q75(count) = quantile(signature,0.75);
+                sig_q01(count) = quantile(signature,0.01);
+                sig_q99(count) = quantile(signature,0.99);
+                I_m(count) = I_m_UK(i);
+                col_fac(count) = ceil((I_m(count)+1)*5);
+                
+                % tmp = MC_results.parameter_set(:,4);
+                A_plot = [A_plot; MC_results.amplitude_ratio(rem)];
+                phi_plot = [phi_plot; MC_results.phase_shift(rem)];
+                BFI_plot = [BFI_plot; MC_results.BFI_UKIH(rem)];
+                
             end
-            
         end
         
         % fig 2
@@ -208,13 +204,13 @@ for model_id = 1:2
         plotHelper1(...
             hax,signature_min,signature_max,signature_name,title_name,model_name,...
             sig_min,sig_max,sig_med,sig_q25,sig_q75,sig_q01,sig_q99,sig_obs,I_m,col_fac)
-                
+        
         % fig2
         if i_name>1
         else
             plotHelper2(f2,model_id,model_name)
         end
-                
+        
     end
 end
 
@@ -342,7 +338,7 @@ position = get(f2,'Position');
 set(f2,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[position(3),position(4)]);
 fig_name_raw = strcat('Model_results_seasonal_signatures_',model_name);
 fig_name = regexprep(fig_name_raw,'[^a-zA-Z0-9]','');
-path_name = './Seasonal_signatures_paper_public/Images';
+path_name = './Seasonal_signatures_paper/Images';
 fig_path = strcat(path_name,'\',fig_name);
 print(f2,fig_path,'-dpdf','-r300');
 
@@ -372,7 +368,7 @@ position = get(f1,'Position');
 set(f1,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[position(3),position(4)]);
 fig_name_raw = strcat('Model_results_range');
 fig_name = regexprep(fig_name_raw,'[^a-zA-Z0-9]','');
-path_name = './Seasonal_signatures_paper_public/Images';
+path_name = './Seasonal_signatures_paper/Images';
 fig_path = strcat(path_name,'\',fig_name);
 print(f1,fig_path,'-dpdf','-r600');
 
