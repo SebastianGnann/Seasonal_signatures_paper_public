@@ -26,12 +26,6 @@ end
 
 %% specify which model runs to evaluate
 
-% check if results files are unzipped
-if exist('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT') ~= 7
-    disp('Unzipping MARRMoT results...')
-    unzip('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT.zip','./Seasonal_signatures_paper/Data_and_results')
-end
-
 % load catchment ID and aridity index
 results_UK_struc = load('seasonal_signatures_UK.mat');
 results_UK = results_UK_struc.seasonal_signatures_UK;
@@ -66,7 +60,7 @@ for model_id = 1:2
         signature_name = signature_name_list(i_name);
         
         % number of parameter sets
-        n_samples = 10000; % 2000, 5000, 10000, 20000
+        n_samples = 20000; % 2000, 5000, 10000, 20000
         parRange = feval([model_name,'_parameter_ranges']); % parameter ranges
         
         % specify subset of catchments
@@ -115,7 +109,7 @@ for model_id = 1:2
                 
                 % load results
                 str_results = ...
-                    strcat('./Seasonal_signatures_paper/Data_and_results/Results_MARRMoT/',...
+                    strcat('./Seasonal_signatures_paper_public/Data_and_results/Results_MARRMoT/',...
                     model_name,'_NR_',num2str(n_samples),'_ID_',num2str(sig_ID(count)),'.mat');
                 load(str_results);
                 
@@ -338,7 +332,7 @@ position = get(f2,'Position');
 set(f2,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[position(3),position(4)]);
 fig_name_raw = strcat('Model_results_seasonal_signatures_',model_name);
 fig_name = regexprep(fig_name_raw,'[^a-zA-Z0-9]','');
-path_name = './Seasonal_signatures_paper/Images';
+path_name = './Seasonal_signatures_paper_public/Images';
 fig_path = strcat(path_name,'\',fig_name);
 print(f2,fig_path,'-dpdf','-r300');
 
@@ -368,7 +362,7 @@ position = get(f1,'Position');
 set(f1,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[position(3),position(4)]);
 fig_name_raw = strcat('Model_results_range');
 fig_name = regexprep(fig_name_raw,'[^a-zA-Z0-9]','');
-path_name = './Seasonal_signatures_paper/Images';
+path_name = './Seasonal_signatures_paper_public/Images';
 fig_path = strcat(path_name,'\',fig_name);
 print(f1,fig_path,'-dpdf','-r600');
 
