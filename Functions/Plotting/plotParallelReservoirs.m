@@ -37,6 +37,7 @@ elseif strcmp(panel,'(c)')
 else
     error('Wrong input. Should be (a), (b), or (c).')
 end
+f_gw_str = strcat(['$p = ',num2str(f_gw),'$']);
 A_theory_mat = sqrt(...
     ((1-f_gw).*A_mat1.*cos(phi_mat1)+f_gw.*A_mat2.*cos(phi_mat2)).^2 ...
    +((1-f_gw).*A_mat1.*sin(phi_mat1)+f_gw.*A_mat2.*sin(phi_mat2)).^2);
@@ -58,7 +59,17 @@ for i=1:length(A_theory_mat(1,:))
         acosA_theory_mat(:,i)./w,...
         '-','linewidth',1.5,'color',colour_mat(i,:));
 end
-
+annotation(f1,'textbox',[0.20 0.80 0.25 0.09],'String',f_gw_str,'LineStyle','None','Interpreter','Latex')
+if strcmp(panel,'(a)')
+    annotation('textarrow',[0.47 0.37],[0.29 0.29],'String','$\tau_2$ increasing','HeadStyle','Plain',...
+        'FontSize',10,'HeadWidth',6,'HeadLength',6,'Color',[0.2 0.2 0.2],'Interpreter','Latex')
+elseif strcmp(panel,'(b)')
+    annotation('textarrow',[0.52 0.42],[0.18 0.18],'String','$\tau_2$ increasing','HeadStyle','Plain',...
+        'FontSize',10,'HeadWidth',6,'HeadLength',6,'Color',[0.2 0.2 0.2],'Interpreter','Latex')
+elseif strcmp(panel,'(c)')
+    annotation('textarrow',[0.39 0.29],[0.24 0.24],'String','$\tau_2$ increasing','HeadStyle','Plain',...
+        'FontSize',10,'HeadWidth',6,'HeadLength',6,'Color',[0.2 0.2 0.2],'Interpreter','Latex')
+end
 ylim([1 120])
 xlim([0 1.2])
 ylabel('Phase shift [days]')

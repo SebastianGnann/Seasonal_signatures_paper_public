@@ -48,7 +48,9 @@ for i=1:length(A_theory_mat(:,1))
         acosA_theory_mat(i,:)./w,...
         '-','linewidth',1.5,'color',colour_mat(i,:));
 end
-
+annotation(f1,'textbox',[0.20 0.80 0.25 0.09],'String',['$0 \le p \le 1$'],'LineStyle','None','Interpreter','Latex')
+annotation('textarrow',[0.4 0.33],[0.27 0.43],'String','$p$ increasing','HeadStyle','Plain',...
+        'FontSize',10,'HeadWidth',6,'HeadLength',6,'Color',[0.2 0.2 0.2],'Interpreter','Latex')
 ylim([1 120])
 xlim([0 1.2])
 ylabel('Phase shift [days]')
